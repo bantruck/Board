@@ -18,12 +18,14 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public boolean registerBoard(BoardDTO params) {
 		int queryResult = 0;
+
 		if (params.getIdx() == null) {
 			queryResult = boardMapper.insertBoard(params);
 		} else {
 			queryResult = boardMapper.updateBoard(params);
 		}
-		return (queryResult == 1 ? true : false);
+		
+		return (queryResult == 1) ? true : false;
 	}
 
 	@Override

@@ -11,12 +11,17 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-@Configuration  // 프링은 해당 애너테이션이 붙은 클래스를 자바 기반의 설정 파일
+@SuppressWarnings("unused")
 @PropertySource("classpath:/application.properties")   // 인자로 지정된 "src/main/resources 디렉터리의 application.properties 파일을 DBConfiguration 클래스에서 사용할 설정 파일로 지정하겠다."라는 의미
+@EnableTransactionManagement // 스프링에서 제공하는 애너테이션 기반 트랜잭션을 활성화
+@Configuration  // 프링은 해당 애너테이션이 붙은 클래스를 자바 기반의 설정 파일
 public class DBConfiguration {
 	
 	@Autowired  // 빈(Bean)으로 등록된 인스턴스(이하 객체)를 클래스에 주입
@@ -77,4 +82,8 @@ public class DBConfiguration {
 		return new org.apache.ibatis.session.Configuration();
 	}
 	
+	@Bean
+	public PlatformTransactionManager transactionManger() {
+		return new DataSourceTransactionManager(dataSource());  // 스프링에서 제공하는 트랜잭션 매니저를 빈(Bean)으로 등록
+	}
 }
